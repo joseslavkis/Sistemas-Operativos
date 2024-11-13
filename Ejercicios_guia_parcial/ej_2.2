@@ -1,0 +1,29 @@
+2.2 Capacidad de memoria en Kbytes.
+Cual es la cantidad de Kbytes que se pueden almacenar en un esquema de memoria
+virtual de 48 bits con 4 niveles de indirecci´on, en la cu´al una direcci´on de memoria se
+describe como sigue: 9 bits para el directorio de p´agina, 9 bits para cada tabla de p´aginas
+y 12 bits para el offset.
+★ Desarrolle las cuentas que se deben realizar para encontrar la cantidad de Kbytes que se pueden
+almacenar.
+
+
+Para empezar, si tenemos una paginación de indirección de 4 niveles tendremos:
+-Page directory
+-Page table #1
+-Page table #2
+-Page table #3
+-Page frame
+
+En primer lugar veamos cuantos tenemos la cantidad de page tables que se pueden almacenar en el page directory, 
+estas son 2^9 = 512 page tables. Cada page table tiene 2^9 = 512 page tables => cada page table #1 tiene 2^9 = 512 page tables, 
+cada page table #2 tiene 2^9 = 512 page tables y cada page table #3 tiene 2^9 = 512 page tables.
+
+Así es como la cantidad de paginas será (2^9)^4 tendremos 2^36 páginas para almacenar.
+Cada pagina es de ... ah, no lo dice el enunciado, pero lo podemos deducir.
+El offset nos permite viajar a lo largo de la página, donde para acceder al primer elemento de una página deberemos 
+poner 000000000000 bits de offset y para acceder a la ultima podríamos poner 2^12 bytes de offset.
+Esto nos da la pauta de que 2^12 bytes es el tamaño de cada pagina. 2^12 bytes = 4 Kbytes.
+
+Por lo tato el tamaño de la memoria virtual será 2^36 * 4 Kbytes = 2^36 * 2^2 kbytes = 2^38 kbytes.
+
+

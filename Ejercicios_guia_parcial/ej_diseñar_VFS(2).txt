@@ -1,0 +1,11 @@
+10 - Ejercicio: Sea un disco que posee 2049 bloques de 4kb y un sistema operativo cuyos i-nodos son de 256 bytes. Definir un sistema de archivos FFS.
+Explique las decisiones tomadas. Desarrolle.
+
+Bueno no describiré con tanto detalle como en el ejercicio anterior, pero si explicaré las decisiones tomadas.
+
+3 bloques iniciales(bitmaps y superblock)
+
+Encada bloque entran 4096/256 = 16 inodos
+Entonces como tendremos 2049 bloques, tendremos 2049/16 = 128,0625 => 129 inodes blocks.
+=> Usaremos 129 bloques para inodos.
+=> Tendremos 2049-3-129 = 1917 bloques para datos.

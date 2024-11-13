@@ -1,0 +1,26 @@
+Traducción de direcciones en un sistema de dos niveles
+Considera un sistema de memoria virtual con un espacio de direcciones de 32 bits y paginación de dos niveles,
+en el que cada tabla ocupa un tamaño de página de 4 KB. Traduce las direcciones virtuales 0x12345678 y 0x87654321 a direcciones físicas,
+indicando paso a paso el proceso de consulta en la TLB y en las tablas de páginas.
+
+Tenemos un sistem de 32 bits, por lo que los 12 bits bajos serán para el offset (ya que 2^12 = 4096 = 4KB)
+y los 20 bits altos para la dirección de la página. Para acceder al frame físico debemos acceder al page directory
+y luego a la page table #1. 10 bits para el page directory y 10 bits para la page table.
+Primero pasemos la direccion virtual a binario:
+12345678[16] = 0001 0010 0011 0100 0101 0110 0111 1000[2]
+10 bits mas altos irán destinados a la dirección específica de la page table correspondiente del page directory.
+Los 10 bits siguientes irán destinados a la dirección dentro de la page table para indicar el frame físico.
+Por último, los 12 bits más bajos serán el offset dentro del frame físico.
+
+Entonces, la dirección virtual 0x12345678 se traduce de la siguiente manera:
+10 bits mas altos: 0000 0100 1000[2] = 0x048
+10 bits siguientes: 0011 0100 0101[2] = 0x345
+12 bits más bajos(offset del frame): 0110 0111 1000[2] = 0x678(no hace falta convertir a hexadecimal)
+
+Entonces accedemos a la entrada 0x048 del page directory, que nos dará la dirección de la page table #1.
+Una vez en esta page table nos remontamos a la entrada 0x345 que nos dará la dirección del frame físico.
+Finalmente, sumamos el offset 0110 0111 1000 (1656 en decimal) a la base del frame físico para obtener la dirección física exacta.
+
+Mismo procedimiento para la dirección virtual 0x87654321(no lo voy a hacer).
+
+

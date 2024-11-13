@@ -1,0 +1,18 @@
+Describe los accesos a inodos y bloques de datos para los siguientes comandos en una estructura de directorios dada.
+Usa la siguiente secuencia:
+
+    mkdir /test /test/subdir
+    echo 'data' > /test/file1
+    ln /test/file1 /test/subdir/file1_link
+    rm /test/file1
+
+
+En primer lugar creamos el directorio /test y dentro de él, el directorio /subdir. 
+Luego, dentro de la carpeta /test creamos un archivo llamado file1 con el contenido 'data'.
+Creamos un hard link de file1 en file1_link que está dentro de /subdir.
+Para realizar la operación de rm /test/file1 deberemos acceder al inodo y bloque root, 
+luego al inodo y bloque de /test y finalmente al inodo de /test/file1.
+Entonces son 3 accesos a inodos y 2 acceso a bloque de datos.
+
+
+

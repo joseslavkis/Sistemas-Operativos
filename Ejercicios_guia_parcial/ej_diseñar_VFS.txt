@@ -1,0 +1,44 @@
+6. Ejercicio: Describir en un esquema y detallar los componentes de un vsfs en un disco de 8192 bloques, cada bloque posee una longitud de 4096 bytes.
+Los inodos del disco tienen un tamaño de 128 bytes.
+
+
+Como algo fijo tendremos el superbloque, este posee toda la información general del sistema de archivos, como:
+- Cantidad de bloques totales
+- Cantidad de inodos
+- Cantidad de bloques libres
+- Cantidad de inodos libres
+- Cantidad de datablocks
+- Cantidad de inodos por bloque
+-etc
+Luego tendremos 2 bloques más, uno para el bitmap de bloques de datos y otro para el bitmap de inodos. Este tendrá un mape binario de todos los bloques
+(tanto de inodos como datablocks) usados o libres. Para el bitmap de datablocks indica con 0 si el bloque i está libre y con 1 si está ocupado.
+Para el inode bitmap indica con 0 si el inodo i está libre y con 1 si está ocupado.
+Luego tendremos los inodos, estos poseen la información de los archivos, como:
+- Tamaño del archivo
+-Creación del archivo
+- Ultima modificación
+-Permisos
+
+ESTO QUE VOY A HACER ES POR DISPOSICIÓN DE LA CÁTEDRA
+
+En un bloque entran 32 inodos (4096/128). Entonces si tengo 8192 bloques, tendré que tener 8192 inodos, ya que como máximo tendré 8192 archivos.
+(REPITO ESTO LO DICTAMINA LA CÁTEDRA).
+Entonces deberemos tener 8192/32 = 256 bloques de inodos.
+
+Así es como determinamos que necesitaremos 256 bloques de inodos y 7933(8192-1-1-1-256) bloques de datos.
+
+Resumen:
+1 superbloque
+1 bitmap inode
+1 bitmap datablock
+256 bloques de inodos
+7933 bloques de datos
+
+
+LA FORMULA SERÍA LA SIGUIENTE(para determinar cantidad de inode blocks):  cant_bloques_de_inodos = Cant_total_de_bloques/inodos_por_bloque
+inodos_por_bloque = tamaño_de_bloque/tamaño_de_inodo
+
+
+
+
+

@@ -1,0 +1,48 @@
+a. El superbloque de un sistema de archivos indica que el (3) inodo correspondiente al
+directorio ra´ız es el #43. En la siguiente secuencia de comandos, y siempre partiendo de
+ese directorio ra´ız, se pide indicar la cantidad de inodos y bloques de datos a los que se
+precisa acceder (leer) para resolver la ruta dada a cat(1) o stat(1).
+# mkdir /dir /dir/s /dir/s/w
+# touch /dir/x /dir/s/y
+#
+1. stat /dir/s/w/x Inodos: --- Blq. datos: ---
+2. stat /dir/s/y Inodos: --- Blq. datos: ---
+#
+# touch /dir/y
+# ln /dir/s/x /dir/h
+# ln -s /dir/s/y /dir/y
+#
+3. cat /dir/h Inodos: --- Blq. datos: ---
+4. cat /dir/y Inodos: --- Blq. datos: ---
+Ayuda: Todos los directorios ocupan un bloque. La idea es que describan como stat llega a los
+archivos.
+★ Justifique los pasos que el sistema operativo necesita hacer para completar cada comando, y que
+resulten en la cantidad de accesos que previamente ha indicado.
+◆ Dibuje como queda el file system en cada caso
+
+
+En primer lugar analizaremos el inciso 1 y 2.
+Se crea un path /dir/s/w, luego dentro de la carpeta dir se crea un archivo x con touch y en la carpeta s se crea un archivo "y".
+Para el inciso 1 accedemos al inodo 43, luego a su datablock. Luego accedemos a dir y a su datablock. Luego accedemos a s y a su datablock.
+Luego accedemos a w y a su datablock. ¿Luego accedemos a x y a su datablock? No, x está en la carpeta dir, no en w. Entonces para el inciso 1
+se accede a 4 inodos y 4 bloques de datos.
+
+Luego para el inciso 2 accedemos al inodo 43, luego a su datablock. Luego accedemos a dir y a su datablock. Luego accedemos a s y a su datablock.
+Luego, como queremos ver las estadisticas del archivo y, accedemos a su inodo asignado pero no a su datablock(solo vemos las stats del archivo, 
+no su contenido). Entonces para el inciso 2 se accede a 4 inodos y 3 bloques de datos.
+
+Ahora nos centraremos en el inciso 3 y 4.
+
+En primer lugar se crea el archivo y dentro de una carpeta llamada dir. Luego se crea un hardlink de /dir/s/x en h y un softlink de /dir/s/y en y.
+Para el inciso 3 accedemos al inodo 43, luego a su datablock. Luego accedemos a dir y a su datablock. Luego accedemos a h y a su datablock.
+Entonces para el inciso 3 se accede a 3 inodos y 3 bloques de datos.
+
+En segundo lugar para el inciso 4 accedemos al inodo 43, luego a su datablock. Luego accedemos a dir y a su datablock. Luego accedemos a "y" y a su datablock.
+Vease que el contenido de "y" es un soft link a /dir/s/y que es un archivo. Entonces idem que en el inciso 2, accedemos a 4 inodos y 4 bloques de datos.
+En total accedemos a 7 inodos y 7 bloques de datos.
+
+
+
+
+
+

@@ -1,0 +1,48 @@
+2.1 Cantidad de direcciones.
+Explicar el mecanismo de address translation memoria virtual paginada de tres niveles
+de indirecci´on de 32 bits. Indique la cantidad de direcciones de memoria que provee, una
+virtual address:
+7 bits 7 bits 6 bits 12 bits
+◆ Dibuje la distribuci´on de las p´aginas y como se conectan:
+• Page Directory.
+• Page Table #1.
+• Page Table #2.
+• Page Frame.
+
+
+Bueno en primer lugar explicaremos en que se basa la memoria virtual paginada de tres niveles de indirección. 
+Todo se remonta al problema que surge a la hora de virtualizar la memoria, amplísimos espacios de memoria inutilizados, o espacios
+de memoria que por mecanismos de segmentación baśico(como el primero que e vió en clase) favoreen la fragmentación de la memoria.
+Pequeños (que en la suma termina siendo una baja de rendimiento importante) espacios de memoria que no se pueden utilizar.
+
+Para ello llega la paginación, en este caso hablaremos de la paginación de tres niveles de indirección. No sin antes
+introducir un poco que es la paginación en sí. Se divide la memoria física en bloques de tamaño fijo, llamados frames.
+Para cada proceso se hace lo mismo con su VAS, se divide en bloques de tamaño fijo, llamados páginas. Cada página tiene asignado su frame respectivo en 
+memoria física. Para la traducción de virtual address a physical address se hace uso de una tabla de páginas, que se encuentra en memoria física. Esta es 
+utilizada por la memory management unit(MMU) para traducir las direcciones virtuales a físicas. 
+¿Porqué necesitamos maaaas niveles que solo 1? Porque vease que si estamos en un sistema de 32 bits, los 20 bits superiores van destinados
+a la dirección de la pagina, mientras que los otros 12 son offsets(que son los bits que se suman a la dirección de la página para obtener la dirección física exacta).
+En este caso tendremos una pagina de 2^20 page entries POR PROCESO!! Esto es un desperdicio de memoria, por eso se implementan los niveles de indirección, 
+para determinar que paginas se usan y cuales no, ahorrando así espacio.
+
+Bueno ahora sí hablemos de la paginación de tres niveles de indirección. En este caso se divide la dirección virtual en 4 partes,
+7 bits para el primer nivel de indirección,
+7 bits para el segundo nivel de indirección, 6 bits para el tercer nivel de indirección y 12 bits para el offset.
+En este caso existe algo que se llama Page directory, es una tabla que posee las direcciones de las page tables.
+La ventaja de esta tabla es que no se necesita tener todas las page tables en memoria, solo las que se estén utilizando(las que tengan una page table asignada).
+Así es como se ahorra memoria con los niveles de indirección. Igualmente no es todo, porque ademas al tener varios niveles de indirección se tiene
+un page directory que apunta a page table(page table #1) y esta page table apunta a otra page table(page table #2) que apunta a los frames (physical adress). 
+
+Así es como ahorramos memoria y tenemos un sistema de paginación eficiente. Igualmente la paginación de tres niveles de indirección es más costosa 
+que la de paginación simple. En la simple podías simplemente acceder al frame desde la page table. Aquí tenes que acceder al page directory,
+luego a la page table #1, luego a la page table #2 y recién ahí accedes al frame.
+
+Los primeros 7 bits representan la dirección de la page directory, los siguientes 7 bits representan la dirección de la page table #1,
+los siguientes 6 bits representan la dirección de la page table #2 y los últimos 12 bits representan el offset dentro del frame.
+
+
+
+
+
+
+

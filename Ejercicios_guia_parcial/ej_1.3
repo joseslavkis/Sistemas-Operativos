@@ -1,0 +1,65 @@
+1.3 Accesos a inodos y datablocks.
+Partiendo de un filesystem vacío se ejecutan una serie de comandos en la shell en el orden
+indicado.
+Para los comandos en negrita, indicar la cantidad de accesos a inodos y accesos a bloques de datos
+que el sistema operativo debe realizar.
+Notas:
+- Asuma que no existe ning´un mecanismo de caché u optimización, y el sistema operativo siempre
+tiene que acceder a todos los inodos y bloques de datos necesarios en cada comando.
+# mkdir /dir /dir/s
+# echo ’hola’ > /dir/x
+# echo ’mundo’ > /dir/s/y
+#
+1. ls /dir/x Inodos: --- Blq. datos: ---
+2. cat /dir/s/y Inodos: --- Blq. datos: ---
+#
+# touch /dir/h /dir/y
+# ln /dir/x /dir/h
+# ln -s /dir/s/y /dir/y
+# rm /dir/x
+
+#
+3. cat /dir/h Inodos: --- Blq. datos: ---
+4. cat /dir/y Inodos: --- Blq. datos: ---
+★ Justifique los pasos que el sistema operativo necesita hacer para completar cada comando, y que
+resulten en la cantidad de accesos que previamente ha indicado.
+◆ Dibuje como queda el file system en cada paso.
+
+
+
+Haremos el inciso 1 y 2 en primer lugar
+
+Vease que tendremos una carpeta /dir y dentro de esta una carpeta s. Luego escribe "hola" en /dir/x y "mundo" en /dir/s/y.
+Para el inciso 1 tendremos que acceder al inodo root y luego a su bloque de datos (1 acceso a inodo y 1 acceso a bloque de datos), 
+luego idem con dir y por último solo al inodo de x ya que al ser un comando ls en un archivo(se que es un archivo y no una carpeta porque hicimos echo) 
+accederemos solamente a su inodo (no al datablock asociado a ese archivo porque no accedemos a la info de dicho archivo x). 
+Entonces para el inciso 1 tendremos 3 accesos a inodos y 2 accesos a bloques de datos.
+
+Luego para el inciso 2 tenemos el acceso al inodo de root, para su posterior acceso al bloque de datos del mismo. 
+Idem con dir y con s. Luego accedemos al inodo de "y" para obtener el puntero al datablock, una vez que obtenemos la ubicación, accedemos
+al contenido de "y" para copiar su contenido.
+Entonces para el inciso 2 tendremos 4 accesos a inodos y 4 accesos a bloques de datos.
+
+Ahora haremos el inciso 3 y 4
+
+Se crea un archivo con touch en la carpeta dir (archivo h e y). Luego se crea un hardlink de x en h y un softlink de s/y en y.
+Luego se elimina el archivo x.
+En primer lugar haremos el 3. Para el inciso 3 accedemos al inodo root y a su datablock, luego accedemos a dir a su datablock. Luego
+accedemos al inodo de h y a su datablock. Luego accedemos al contenido de h para copiarlo. En total es 3 accesos a inodos y 3 accesos a datablocks.
+
+Luego para el inciso 4 accedemos al inodo root y a su datablock, luego accedemos a dir a su datablock. Luego accedemos al inodo de "y" y a su datablock.
+Aquí hay una diferencia sustancial, el contenido del datablock de "y" es un soft link a un archivo que si posee información que no sea un linking.
+Entonces aquí deberemos ir a /dir/s/y que es hacia donde se hizo el soft link. Cabe reclaclar que por ahora vamos 3 inodos y 3 bloques.
+Bueno despues no voy a hacer el seguimiento pero se accede al data block de /dir/s/y (son 4 y 4)
+Conclusión, el inciso 4 tiene 7 accesos a inodos y 7 accesos a datablocks.
+
+
+
+
+
+
+
+
+
+
+

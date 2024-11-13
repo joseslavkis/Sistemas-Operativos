@@ -1,0 +1,32 @@
+Suponiendo que BigFS es una variante de FSS, el clásico sistema de archivos de unix,
+el cual posee 12 referencias inodos directas, 1 indirecta, 1 doble indirecta, una triple
+indirecta y una cuádruple indirecta. Asumiendo bloques de 4 Kb, 8 byte por puntero a
+bloques.
+★ ¿Cuál es el máximo tamaño de archivo que se soporta? Expresar en Terabytes.
+◆ Dibujar la distribución de los punteros y los bloques de punteros.
+
+
+Bueno, tenemos un sistema de archivos extremadamente grande en términos de capacidad.
+Para calcular el tamaño maximo de un archivo, primero debemos calcular la cantidad de bloques que se pueden referenciar.
+En primer lugar, tenemos 12 referencias inodos directas, es decir, 12 referencias a datablocks. Por ahora esto serían
+12 * 4kb = 48kb. Luego tenemos un bloque de indirección simple, este nos apunta a un bloque de datos de 4kb que contiene punteros de 8 bytes.
+
+Esto quiere decir que cada bloque de datos que contenga punteros va a poder almacenar 512 punteros a datablocks(4096/8).
+Por lo tanto ahora tenemos 512(punteros) * 4kb = 2048kb = 2mb (ignoro los 48 kb iniciales aunque rigurosamente no se debería hacer, es para simplificar el cálculo).
+
+Luego tenemos el bloque de indirección doble(que lo vamos a calcular un poco mas rápido), 512*512*4kb = 1024mb = 1gb.
+
+Luego tenemos el bloque de indirección triple, 512*512*512*4kb = 512gb.
+
+Por último tenemos el bloque de indirección cuádruple, 512*512*512*512 * 4KB = 256 Terabytes = 256tb.
+
+Conclusión, la capacidad máxima de un archivo sería 48kb+2mb+1gb+512gb+256tb
+
+48 kb = 4,47*10^-8 Terabytes
+2mb = 1,95*10^-3 Terabytes
+1gb = 9,77 * 10^-4 Terabytes (Aca hay una cuenta mal hecha pero no influye)
+512 gb = 0,5 Terabytes
+256 tb = 256 Terabytes
+
+Entonces el tamaño máximo de un archivo sería de 256,5 Terabytes aproximadamente.
+

@@ -1,0 +1,26 @@
+Sea un disco que posee 512 bloques de 4kb y un sistema operativo cuyos inodos son de
+256 bytes, definir un sistema de archivos FFS.
+★ Justifique en base a que, se toman todas las decisiones para el armado del FFS
+
+
+Tenemos 512 bloques de 4kb (= 4096 bytes) cada uno para representar un fileSystem.
+Cada inodo ocupa 256 bytes, es decir, que cada bloque de inodos(que tiene una capacidad de 4096 bytes cada uno)
+puede almacenar 4096/256 = 16 inodos.
+Tenemos 3 bloques fijos => el superblock y los dos bitmaps. Entonces, ya tenemos 3 bloques utilizados(no voy a explicar la funcionalidad de c/u).
+
+Ahora debemos ver cuantos bloques de inodos necesitamos. Por convención de la cátedra, se van a necesitar tantos inodos como 
+maxima cantidad de bloques haya. Entonces, como tenemos 512 bloques, necesitaremos 512 inodos.
+Esto implica que para 512 bloques vamos a necesitar una cantidad de bloques de inodos tal que 16*x = 512, donde x es la cantidad de bloques de inodos.
+Esto es porque cada bloque de inodo puede tener hasta 16 inodos. Entonces, x = 512/16 = 32 bloques de inodos.
+
+datablocks = 512-3-32 = 477.
+
+Resumen:
+
+- 1 superbloque
+- 1 bitmap de inodos
+- 1 bitmap de datablocks
+- 32 bloques de inodos
+- 477 bloques de datos
+
+

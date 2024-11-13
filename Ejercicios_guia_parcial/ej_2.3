@@ -1,0 +1,47 @@
+2.3 Traducción de direcciones.
+
+Suponga a las direcciones virtuales con las siguientes características:
+
+    4 bits para el número de segmento.
+    12 bits para el número de página.
+    16 bits para el offset.
+
+Segment table	Page Table A	Page Table B
+0 Page B	    0 ZASPEH	    0 F000
+1 Page A	    1 DEAD	        1 D8BF
+X Invalid	    2 BEEF	        2 3333
+	            3 BA11	        X Invalid
+
+Traducir las siguientes direcciones virtuales a físicas: [0000000], [20022002], [10222002], [00015555]
+
+★ Desarrolle cómo se realizan las traducciones y cuál número de cada dirección indica las distintas tablas.
+
+◆ Dibujar cómo se acceden a las distintas tablas y páginas.
+
+
+En primer lugar cabe analizar la segment table. Esta nos dice a cual page table dirigirnos, en caso de que segment number sea 0 
+usamos la page table B y si es 1 usamos la page table A. En cualquier otro caso la page table es inválida (o mejor dicho el segment number es inválido).
+
+Primer caso: [0000000]
+
+En este caso el segment number es 0, por lo que debemos usar la page table B. El page number es 0, por lo que debemos usar la entrada 0 de la page table B.
+Aquí obtenemos la dirección física es 0xF000, a esta le sumamos el offset (en este caso 0) y obtenemos la dirección física final 0xF000.
+
+Segundo caso: [20022002]
+
+El segment number es 2 => inválido.
+
+Tercer caso: [10222002]
+
+El segment number es 1, entonces usaremos la page table A. Luego la dirección física es inválida ya que el page number
+sería 022 el cual no está asignado en la page table A.
+
+Cuarto caso: [00015555]
+
+El segment number es 0, entonces usaremos la page table B. Luego el page number es 1, por lo que debemos usar la entrada 1 de la page table B.
+Y por último dentro de esta dirección física obtenida (0xD8BF) le sumaremos el offset (0x5555) para obtener la dirección física final (0x12E34)
+
+
+
+
+

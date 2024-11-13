@@ -1,0 +1,29 @@
+2.4 Accesos a memoria.
+Considere un sistema x86 de memoria virtual paginada de dos niveles con un espacio de
+direcciones de 32 bits, donde cada página tiene un tamaño de 4096 bytes. Un entero
+ocupa 4 bytes y se tiene un array de 50,000 enteros que comienza en la dirección virtual
+0x01FBD000.
+El arreglo se recorre completamente, accediendo a cada elemento una vez. En este proceso, ¿a
+cuántas páginas distintas (no la cantidad total de accesos) necesita acceder el sistema operativo
+para conseguir esto? Recuerde contar las tablas de páginas intermedias, no solo las páginas que
+contienen los elementos del array.
+★ Desarrolle como se realizan los accesos y cuantos enteros se ocupan por página.
+◆ dibuje como se realizan los accesos a las distintas páginas. (Realizar un dibujo conceptual que
+muestre como se usa la memoria).
+
+En total hay 50000 enteros de 4 bytes cada uno, esto ocupa unos 200000 bytes. Cada paǵina tiene capacidad de 4096 bytes, 
+además en cada página entran 1024 enteros, por lo que se necesitarán 49 páginas para almacenar los 50000 enteros.
+Por cada elemento accederemos al page directory y a la page table asignada donde se halla la dirección física de la página que contiene el elemento.
+En un sistema de 32 bits, son 10 para el page directory, 10 para la page table y 12 para el offset.
+El page directory tiene 2^10 = 1024 entradas, luego la page table tambien tiene 1024 entradas.
+Dado que el array entra en 49 paginas y cada entrada del page directory te abre una puerta a 1024 page tables y
+cada page table tiene 1024 entradas, solo necesitaremos acceder a 49 páginas.
+Conclusión: se necesitarán 49 + 1(por page directory) + 1(por page table) = 51 accesos a memoria para recorrer el array.
+
+
+ACLARACION: EN REALIDAD SE ACCEDEN A 49*3(este 3 viene de 1 por page directory + 1 por page table + 1 por frame) = 147 PAGINAS
+PERO COMO NOS DICEN PÁGINAS DISTINTAS Y NO LA CANTIDAD TOTAL DE ACCESOS... LA RESPUESTA ES 51 PÁGINAS DISTINTAS.
+
+
+
+

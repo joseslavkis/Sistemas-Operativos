@@ -1,0 +1,43 @@
+Considere un sistema x86 de memoria virtual paginada de dos niveles con un espacio de direcciones de 32 bits,
+donde cada página tiene un tamaño de 4096 bytes. Un entero ocupa 4 bytes,
+y se tiene un arreglo de 50,000 enteros que comienza en la dirección virtual 0x01FBD000.
+
+El arreglo se recorre completamente, accediendo a cada elemento una vez.
+Recuerde contar las tablas de páginas intermedias, no solo las páginas que contienen los elementos del arreglo.
+
+En este escenario, el sistema tiene un TLB que mapea entradas de direcciones de página virtual a direcciones físicas de manera eficiente.
+Requerimientos:
+1-Describa cómo se realizan los accesos a las páginas de memoria durante el recorrido del arreglo y cuántos enteros se ocupan por página.
+2-Explique cómo el TLB optimiza el proceso de acceso a la memoria, considerando la localización temporal y espacial de los accesos a la memoria.
+3-Calcule la cantidad de entradas del TLB que se podrían cargar durante el proceso completo de acceso al arreglo.
+
+
+1-Se tiene un arreglo de 50000 enteros, cada uno de 4 bytes, por lo que en total se tienen 200000 bytes.
+Las páginas ocupan 4096 bytes, por lo que en cada página entran 1024 enteros. Además el offset será de 12 bits (2^12 = 4096).
+La cantidad exacta de páginas que se necesitarán para almacenar los 50000 enteros es de 50000/1024 = 48.8(redondeamos para arriba claramente) = 49.
+Esto nos indica que SOLAMENTE los números, ocuparán 49 páginas. Ahora deberemos considerar los accesos a páginas intermedias.
+En primer lugar se accede a un page directory para cada página y a una page table para cada página,
+y se realiza una Traducción al frame físico por página.
+Por lo que el resultado será 49 frames accedidos y por cada uno se hace el acceso al page directory,
+a la page table y a la página de datos (el frame) = 147 páginas en total.
+(ACLARACIÓN: EN EL EJERCICIO ORIGINAL DE ESTE ENUNCIADO LA RESPUESTA ERA 51, ESO ES PORQUE DECÍA DE NO REPETIR
+ACCESOS A PÁGINAS INTERMEDIAS, PERO EN REALIDAD SE ACCEDEN A 147 PÁGINAS EN TOTAL).
+
+2-La TLB funciona de la siguiente manera:
+Una página es cargada en la TLB y cuando se solicita algo de la memoria, se busca primero en la TLB. Si este pertenece a la TLB, 
+se lo llama hit. Por otro lado si el elemento no se encuentra, se busca en la memoria virtual y se lo carga la página del elemento en la TLB.
+Luego se vuelve a buscar en la TLB y ahora sí estará el elemento buscado.
+La ventaja de este proceso es que se evita la búsqueda en la memoria virtual, que es mucho más lenta que la TLB.
+Si por ejemplo se recorre un arreglo de elementos contiguos en memoria, la TLB tendra tantos misses como páginas ocupe el arreglo, 
+pero tendrá un hit por cada elemento del arreglo que esté incluido en la página que produjo el miss.
+Esto nos da la pauta de que la cantidad de hits es mucho mayor que la cantidad de misses, lo que optimiza el proceso de acceso a la memoria.
+Esto se debe a que en muchos casos la traducción resulta de varios niveles y puede resultar algo costoso en tiempo a comparación de 
+utilizar translation lookaside buffer (TLB).
+En la materia no se dictan políticas de reemplazo de TLB, por lo que la parte de localización espacial estaría de más.
+
+3-Este calculo es super simple y ya lo describí en el punto 2. Se cargarán tantas páginas como misses haya en la TLB.
+Por lo que en este caso se cargarán 49 entradas en la TLB.
+
+
+
+

@@ -1,0 +1,41 @@
+2.5 Idem anterior (variante de parcial).
+Dado un espacio de direcciones virtuales con direcciones de 8 bits y páginas de 16 bytes,
+asume un array de 12 enteros (cada uno de 4 bytes) comenzando en la direcci´on virtual
+100. Calcula el patrón de aciertos y fallos en la TLB cuando se accede a todos los
+elementos del array en un bucle. Asume que inicialmente, la TLB est´a vac´ıa.
+Pasos:
+1. Determina el VPN y el desplazamiento para cada elemento del array.
+2. Identifica si ocurre un acierto o un fallo en la TLB para cada acceso.
+★ Desarrolle como se realizan los accesos y cuantos enteros se ocupan por p´agina.
+◆ dibuje como se realizan los accesos a las distintas p´aginas. (Realizar un dibujo conceptual que
+muestre como se usa la memoria)
+
+ASUMO QUE LAS DIRECCIONES VIRTUALES ESTAN EN DECIMAL ASI ME QUEDAN 8 BITS(supongo que es así porque en el arpaci tmb lo toman así de decimal a binario)
+
+COMO EL TAMAÑO DE LA PAGINA ES DE 16 BYTES, NECESITAMOS OFFSET DE 4 BITS (2^4 = 16) PARA REPRESENTAR 16 POSICIONES DISTINTAS.
+
+2^offset(bits) = tamaño de la pagina(bytes)<-- formula para calcular el offset 
+
+Empecemos, en la TLB se cargan páginas. Osea si tenes cargada la página 0 para el primer elemento de esta, la TLB
+va a fallar a la hora de buscar el primer elemento pero dará un acierto cuando busque el segundo(que tambien pertenece a la página 0).
+En una página entran 4 enteros, por lo que en total se necesitan 3 páginas para los 12 enteros.
+
+Para empezar debemos saber que los 4 bits altos van para el VPN y los otros 4 bits bajos para el offset.
+En el caso del primer elemento tendremos la direc virtual 100, que en binario es 0110 0100 en binario.
+100(0110 0100): VPN = 6 y offset = 4. Como la TLB está vacía, va a fallar en el primer acceso y va a cargar la página 6.
+104(0110 1000): VPN = 6 y offset = 8. La TLB ya tiene la página 6 entonces es un acierto
+108(0110 1100): VPN = 6 y offset = 12. Acierto(idem de arriba)
+112(0111 0000): VPN = 7 y offset = 0. Va a ser un missing por lo tanto cargaremos en la TLB la página 7.
+116(0111 0100): VPN = 7, offset = 4. Acierto porque esta cargada página 7.
+120(0111 1000): VPN = 7, offset = 8. Acierto(idem de arriba)
+124(0111 1100): VPN = 7, offset = 12. Acierto(idem de arriba)
+128(1000 0000): VPN = 8, offset = 0. Missing, cargamos página 8.
+132(1000 0100): VPN = 8, offset = 4. Acierto(idem de arriba)
+136(1000 1000): VPN = 8, offset = 8. Acierto(idem de arriba)
+140(1000 1100): VPN = 8, offset = 12. Acierto(idem de arriba)
+144(1001 0000): VPN = 9, offset = 0. Missing, cargamos página 9.
+
+
+
+
+

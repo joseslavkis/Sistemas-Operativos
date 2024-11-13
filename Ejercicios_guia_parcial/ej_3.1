@@ -1,0 +1,25 @@
+3 Scheduling
+3.1 Ejecuci´on de un proceso MLFQ.
+Sea 1 proceso, cuyo tiempo de ejecuci´on total es de 40 ms, el time slice por cola es de 2
+ms/c pero el mismo se incrementa en 5 ms por cola.
+★ ¿Cu´antas veces se interrumpe y en qu´e cola termina su ejecuci´on?
+◆ Dibuje las colas detalladamente, mostrando los pasos y c´omo el proceso va perdiendo prioridad
+mientras se ejecuta.
+
+
+Bueno no es dificil de hacer el opcional.
+
+El proceso entra a la cola 1(supongamos que es la de mejor prioridad) y se toma los 2ms(quedan 38).
+Baja de prioridad por consumir todo su tiempo (1 INTERRUPCIÓN) y pasa a la cola 2, aquí se toma un timeslice de 7 ms(31 ms).
+Al consumir todo el timeslice disponible baja a la cola 3 (2 INTERRUPCIONES ACUMULADAS), aquí consume 12 ms(19 ms).
+Baja a la cola 4 (3 INTERRUPCIONES ACUMULADAS) y consume 17 ms(2 ms).
+Luego baja a la cola 5 (4 INTERRUPCIONES ACUMULADAS) y consume solo 2 ms que eran los que le faltaba(0 ms).
+Como en la cola 5 no volvió a consumir todo el timeslice, no baja de cola de prioridad.
+
+RTA: Se interrumpe 4 veces y termina en la cola 5(suponiendo que la cola 1 es la de mejor prioridad).
+
+
+
+
+
+
